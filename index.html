@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>USMLE Board Review - Embryology & Dysmorphology</title>
+    <title>USMLE Board Master Suite - Embryology & Dysmorphology</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
                 </div>
                 <div>
                     <h1 class="text-lg font-bold tracking-wide">USMLE Board Master Suite</h1>
-                    <p class="text-xs text-blue-200/70">Interactive Clinical Embryology Simulator</p>
+                    <p class="text-xs text-blue-200/70">Clinical Embryology & Genetics Interactive Simulator</p>
                 </div>
             </div>
             <div class="bg-white/10 px-4 py-2 rounded-xl text-sm font-semibold border border-white/5 backdrop-blur-sm">
@@ -37,8 +37,8 @@
         
         <section id="dashboard-view" class="block animate-fadeIn">
             <div class="bg-white rounded-2xl shadow-sm p-6 mb-8 border border-slate-200/60">
-                <h2 class="text-2xl font-bold text-slate-800 mb-1">ศูนย์รวมคลังข้อสอบบอร์ดแพทย์ (Embryology & Genetic Testing)</h2>
-                <p class="text-slate-600 text-sm">คลิกเลือกชุดข้อสอบจำลองด้านล่างเพื่อเริ่มกระบวนการทดสอบความรู้ ระบบจะทำการคำนวณสถิติและประเมินตัดเกรดให้แบบเรียลไทม์ครับ</p>
+                <h2 class="text-2xl font-bold text-slate-800 mb-1">แผงควบคุมระบบคลังข้อสอบจำลองแพทย์</h2>
+                <p class="text-slate-600 text-sm">คลิกเลือกโมดูลข้อสอบด้านล่างเพื่อเข้าสู่ระบบฝึกทำข้อสอบ ระบบจะบันทึกสถานะคะแนนและวิเคราะห์ผลลัพธ์รายพาร์ทให้ทันทีครับ</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="parts-grid">
                 </div>
@@ -48,7 +48,7 @@
             <div class="bg-white rounded-xl shadow-sm p-4 mb-6 border border-slate-200/60 flex flex-col sm:flex-row justify-between items-center gap-4 sticky top-20 z-40">
                 <button onclick="exitToDashboard()" class="flex items-center text-sm font-bold text-slate-500 hover:text-slate-800 transition">
                     <svg class="w-4.5 h-4.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    กลับไปแผงควบคุม
+                    กลับไปหน้าหลัก
                 </button>
                 <div class="flex items-center gap-4 w-full sm:w-auto justify-end">
                     <div class="text-sm font-bold text-slate-600">พาร์ทนี้ได้: <span id="current-score" class="text-blue-600">0</span></div>
@@ -62,20 +62,19 @@
             <div class="bg-white rounded-2xl shadow-md p-6 sm:p-8 border border-slate-100 mb-6">
                 <div class="mb-6">
                     <span id="question-category-tag" class="bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-md uppercase tracking-wider">Clinical Reasoning Case</span>
-                    <h3 id="question-text" class="text-lg sm:text-xl font-bold text-slate-900 mt-4 leading-relaxed">Loading active item...</h3>
+                    <h3 id="question-text" class="text-lg sm:text-xl font-bold text-slate-900 mt-4 leading-relaxed">Loading question data...</h3>
                 </div>
 
-                <div class="space-y-3" id="options-container">
-                    </div>
+                <div class="space-y-3" id="options-container"></div>
 
                 <div id="explanation-panel" class="hidden mt-8 border-t border-slate-100 pt-6 animate-fadeIn">
                     <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200/80">
                         <div class="flex items-center space-x-2 text-indigo-800 mb-3 font-bold">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             <h4>คำอธิบายเชิงพยาธิสรีรวิทยาและกลไกคลินิก (Clinical Mechanism)</h4>
                         </div>
                         <p id="clinical-context" class="text-slate-700 text-sm mb-4 leading-relaxed bg-white p-4 rounded-xl border border-slate-100 shadow-sm font-medium"></p>
-                        <div class="space-y-2" id="choice-breakdowns"></div>
+                        <div class="space-y-2 text-left" id="choice-breakdowns"></div>
                         
                         <div class="mt-6 flex justify-end">
                             <button id="next-btn" onclick="nextQuestion()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl shadow-sm transition flex items-center">
@@ -93,16 +92,16 @@
                 <div class="inline-flex p-4 rounded-full bg-blue-50 text-blue-600 mb-4" id="summary-icon-box">
                     <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
-                <h2 class="text-2xl font-bold text-slate-900 mb-1" id="summary-part-title">สิ้นสุดการทดสอบพาร์ทนี้!</h2>
-                <p class="text-slate-400 text-xs mb-6">สรุปผลสัมฤทธิ์และผลการวิเคราะห์ระดับความรู้ความสามารถของคุณสำหรับโมดูลนี้</p>
+                <h2 class="text-2xl font-bold text-slate-900 mb-1" id="summary-part-title">จบโมดูลเรียบร้อยแล้ว!</h2>
+                <p class="text-slate-400 text-xs mb-6">สรุปประเมินสัดส่วนสมรรถภาพของระดับความรู้ของคุณในชุดนี้</p>
 
                 <div class="grid grid-cols-2 gap-4 max-w-xs mx-auto mb-8 bg-slate-50 p-4 rounded-xl border border-slate-200/60">
                     <div class="text-center border-r border-slate-200">
-                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">คะแนนสอบ</div>
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">คะแนนที่ทำได้</div>
                         <div class="text-3xl font-extrabold text-slate-800 mt-1"><span id="summary-score">0</span>/<span id="summary-total">0</span></div>
                     </div>
                     <div class="text-center">
-                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">ระดับความรอบรู้</div>
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">เกรดประเมิน</div>
                         <div id="summary-grade" class="text-base font-extrabold mt-3 text-emerald-600">Excellent</div>
                     </div>
                 </div>
@@ -113,7 +112,7 @@
                         ดูประวัติทบทวนรายข้อ
                     </button>
                     <button onclick="restartCurrentPart()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-3 rounded-xl shadow-sm transition text-sm flex items-center justify-center">
-                        ทำข้อสอบซ้ำอีกครั้ง
+                        ทำใหมู่อีกครั้ง
                     </button>
                     <button onclick="exitToDashboard()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold px-5 py-3 rounded-xl shadow-sm transition text-sm flex items-center justify-center">
                         กลับหน้าหลัก
@@ -122,12 +121,16 @@
             </div>
 
             <div id="review-details-section" class="hidden max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200/60 p-6 animate-fadeIn">
-                <h3 class="text-lg font-bold text-slate-800 mb-4 pb-2 border-b border-slate-100">บันทึกวิเคราะห์ผลสัมฤทธิ์รายข้อ (Itemized Evaluation)</h3>
+                <h3 class="text-lg font-bold text-slate-800 mb-4 pb-2 border-b border-slate-100">ตรวจสอบประวัติการประเมินแบบข้อต่อข้อ (Itemized Logs)</h3>
                 <div class="space-y-6" id="review-list-container"></div>
             </div>
         </section>
 
     </main>
+
+    <footer class="bg-slate-100 border-t border-slate-200 py-6 text-center text-xs text-slate-400">
+        &copy; 2026 MD Exam Simulator Engine. Synchronized with High-Yield USMLE Blueprints.
+    </footer>
 
     <script>
         let currentPartId = null;
@@ -135,11 +138,10 @@
         let partScore = 0;
         let sessionReviewLogs = [];
 
-        // Loop to confirm integration with external database script
         window.addEventListener('load', () => {
-            const syncInterval = setInterval(() => {
+            const checkDataInterval = setInterval(() => {
                 if (window.examDatabase && Object.keys(window.examDatabase).length > 0) {
-                    clearInterval(syncInterval);
+                    clearInterval(checkDataInterval);
                     initializeDashboard();
                     recalculateGlobalScore();
                 }
@@ -165,12 +167,12 @@
                             </span>
                             <span class="text-xs font-bold text-slate-400\">\${part.questions.length\} Questions</span>
                         </div>
-                        <h3 class="text-base font-bold text-slate-800 mb-2">\${part.title\}</h3>
-                        <p class="text-xs text-slate-500 mb-6 leading-relaxed">\${part.description\}</p>
+                        <h3 class="text-base font-bold text-slate-800 mb-2">\text-left \${part.title\}</h3>
+                        <p class="text-xs text-slate-500 mb-6 leading-relaxed text-left\">\${part.description\}</p>
                     </div>
                     <div class="flex items-center justify-between pt-4 border-t border-slate-100 mt-auto">
                         <span class="text-xs font-bold text-slate-500">
-                            \${isDone ? `คะแนนสูงสุด: <span class="text-blue-600">\${savedScore\}/\${part.questions.length\}</span>` : ''\}
+                            \${isDone ? `คะแนนสูงสุด: <span class="text-blue-600">\text-left \${savedScore\}/\${part.questions.length\}</span>` : ''\}
                         </span>
                         <button onclick="launchExamArena('\${key\}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-sm transition">
                             \${isDone ? 'ทดสอบซ้ำ' : 'เริ่มทำข้อสอบ'\}
@@ -232,7 +234,7 @@
         }
 
         function evaluateChoice(selectedKey) {
-            const part = window.window.examDatabase[currentPartId];
+            const part = window.examDatabase[currentPartId];
             const q = part.questions[currentQuestionIndex];
             const blocks = document.getElementById("options-container").children;
 
@@ -269,7 +271,7 @@
 
             Object.keys(q.explanations).forEach(key => {
                 const node = document.createElement("div");
-                node.className = `p-3 rounded-xl text-xs leading-relaxed mb-1.5 border \text-left \${key === q.correct ? 'bg-emerald-50 border-emerald-200 text-emerald-900 font-medium' : 'bg-white border-slate-200 text-slate-600'\}`;
+                node.className = `p-3 rounded-xl text-xs leading-relaxed mb-1.5 border text-left \${key === q.correct ? 'bg-emerald-50 border-emerald-200 text-emerald-900 font-medium' : 'bg-white border-slate-200 text-slate-600'\}`;
                 node.innerHTML = `<strong>ช้อยส์ \${key\}:</strong> \${q.explanations[key]\}`;
                 breakdownBox.appendChild(node);
             });
@@ -291,8 +293,8 @@
 
         function compileEvaluationMetrics() {
             const part = window.examDatabase[currentPartId];
-            localStorage.setItem(`status_${currentPartId}`, "completed");
-            localStorage.setItem(`score_${currentPartId}`, partScore);
+            localStorage.setItem(`status_\${currentPartId\}`, "completed");
+            localStorage.setItem(`score_\${currentPartId\}`, partScore);
 
             document.getElementById("quiz-view").classList.add("hidden");
             document.getElementById("summary-view").classList.remove("hidden");
@@ -347,7 +349,7 @@
 
                     rawChoices += `
                         <div class="text-xs p-2.5 rounded-lg border \${styleRules\} mb-1 flex justify-between items-center">
-                            <span><strong>\${k\}:</strong> \${item.choices[k]\}</span>
+                            <span><strong>\text-left \${k\}:</strong> \${item.choices[k]\}</span>
                             \${k === item.systemAnswer ? '<span class="text-[10px] bg-emerald-500 text-white font-bold px-1.5 py-0.5 rounded">เฉลย</span>' : ''\}
                             \${k === item.userAnswer && !item.status ? '<span class="text-[10px] bg-red-500 text-white font-bold px-1.5 py-0.5 rounded">คุณตอบ</span>' : ''\}
                         </div>
@@ -356,13 +358,13 @@
 
                 node.innerHTML = `
                     <div class="flex items-start space-x-2 mb-3">
-                        <span class="flex-shrink-0 text-[10px] font-bold px-2 py-0.5 rounded \${item.status ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'\}">
+                        <span class="flex-shrink-0 text-[10px] font-bold px-2 py-0.5 rounded \text-left \${item.status ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'\}">
                             ข้อที่ \${index + 1\} • \${item.status ? 'ถูก' : 'ผิด'\}
                         </span>
-                        <h4 class="text-xs font-bold text-slate-800 leading-relaxed">\${item.title\}</h4>
+                        <h4 class="text-xs font-bold text-slate-800 leading-relaxed text-left">\${item.title\}</h4>
                     </div>
                     <div class="space-y-1 mb-2">\${rawChoices\}</div>
-                    <div class="bg-white p-3 rounded-lg border border-slate-200/80 text-xs text-slate-600 font-medium">
+                    <div class="bg-white p-3 rounded-lg border border-slate-200/80 text-xs text-slate-600 font-medium text-left">
                         <span class="font-bold text-indigo-700 block mb-1">กลไกคลินิก:</span> \${item.rationale\}
                     </div>
                 `;
@@ -381,7 +383,6 @@
             launchExamArena(currentPartId);
         }
     </script>
-
     <script src="questions.js"></script>
 </body>
 </html>
