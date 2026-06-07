@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USMLE Board Review - Embryology & Dysmorphology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', 'Sarabun', sans-serif; }
+        .animate-fadeIn { animation: fadeIn 0.25s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 text-white shadow-lg sticky top-0 z-50 border-b border-white/5">
+        <div class="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-md border border-white/10">
+                    <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-wide">USMLE Board Master Suite</h1>
+                    <p class="text-xs text-blue-200/70">Interactive Clinical Embryology Simulator</p>
+                </div>
+            </div>
+            <div class="bg-white/10 px-4 py-2 rounded-xl text-sm font-semibold border border-white/5 backdrop-blur-sm">
+                คะแนนสะสมรวมทุกพาร์ท: <span id="global-score-tally" class="font-extrabold text-yellow-300 text-base">0</span> ข้อ
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 flex-grow max-w-5xl">
+        
+        <section id="dashboard-view" class="block animate-fadeIn">
+            <div class="bg-white rounded-2xl shadow-sm p-6 mb-8 border border-slate-200/60">
+                <h2 class="text-2xl font-bold text-slate-800 mb-1">ศูนย์รวมคลังข้อสอบบอร์ดแพทย์ (Embryology & Genetic Testing)</h2>
+                <p class="text-slate-600 text-sm">คลิกเลือกชุดข้อสอบจำลองด้านล่างเพื่อเริ่มกระบวนการทดสอบความรู้ ระบบจะทำการคำนวณสถิติและประเมินตัดเกรดให้แบบเรียลไทม์ครับ</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="parts-grid">
+                </div>
+        </section>
+
+        <section id="quiz-view" class="hidden animate-fadeIn">
+            <div class="bg-white rounded-xl shadow-sm p-4 mb-6 border border-slate-200/60 flex flex-col sm:flex-row justify-between items-center gap-4 sticky top-20 z-40">
+                <button onclick="exitToDashboard()" class="flex items-center text-sm font-bold text-slate-500 hover:text-slate-800 transition">
+                    <svg class="w-4.5 h-4.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    กลับไปแผงควบคุม
+                </button>
+                <div class="flex items-center gap-4 w-full sm:w-auto justify-end">
+                    <div class="text-sm font-bold text-slate-600">พาร์ทนี้ได้: <span id="current-score" class="text-blue-600">0</span></div>
+                    <div class="flex-grow sm:flex-grow-0 w-36 bg-slate-200 rounded-full h-2.5 overflow-hidden">
+                        <div id="progress-bar-fill" class="bg-blue-600 h-2.5 transition-all duration-300"></div>
+                    </div>
+                    <div id="progress-text" class="text-xs font-bold text-slate-400 whitespace-nowrap">ข้อที่ 1/20</div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-md p-6 sm:p-8 border border-slate-100 mb-6">
+                <div class="mb-6">
+                    <span id="question-category-tag" class="bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-md uppercase tracking-wider">Clinical Reasoning Case</span>
+                    <h3 id="question-text" class="text-lg sm:text-xl font-bold text-slate-900 mt-4 leading-relaxed">Loading active item...</h3>
+                </div>
+
+                <div class="space-y-3" id="options-container">
+                    </div>
+
+                <div id="explanation-panel" class="hidden mt-8 border-t border-slate-100 pt-6 animate-fadeIn">
+                    <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200/80">
+                        <div class="flex items-center space-x-2 text-indigo-800 mb-3 font-bold">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <h4>คำอธิบายเชิงพยาธิสรีรวิทยาและกลไกคลินิก (Clinical Mechanism)</h4>
+                        </div>
+                        <p id="clinical-context" class="text-slate-700 text-sm mb-4 leading-relaxed bg-white p-4 rounded-xl border border-slate-100 shadow-sm font-medium"></p>
+                        <div class="space-y-2" id="choice-breakdowns"></div>
+                        
+                        <div class="mt-6 flex justify-end">
+                            <button id="next-btn" onclick="nextQuestion()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl shadow-sm transition flex items-center">
+                                <span>ข้อถัดไป</span>
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="summary-view" class="hidden animate-fadeIn">
+            <div class="bg-white rounded-2xl shadow-md p-8 border border-slate-100 text-center max-w-2xl mx-auto mb-8">
+                <div class="inline-flex p-4 rounded-full bg-blue-50 text-blue-600 mb-4" id="summary-icon-box">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-1" id="summary-part-title">สิ้นสุดการทดสอบพาร์ทนี้!</h2>
+                <p class="text-slate-400 text-xs mb-6">สรุปผลสัมฤทธิ์และผลการวิเคราะห์ระดับความรู้ความสามารถของคุณสำหรับโมดูลนี้</p>
+
+                <div class="grid grid-cols-2 gap-4 max-w-xs mx-auto mb-8 bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+                    <div class="text-center border-r border-slate-200">
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">คะแนนสอบ</div>
+                        <div class="text-3xl font-extrabold text-slate-800 mt-1"><span id="summary-score">0</span>/<span id="summary-total">0</span></div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">ระดับความรอบรู้</div>
+                        <div id="summary-grade" class="text-base font-extrabold mt-3 text-emerald-600">Excellent</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-3">
+                    <button onclick="toggleReviewDetails()" class="border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold px-5 py-3 rounded-xl transition text-sm flex items-center justify-center">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        ดูประวัติทบทวนรายข้อ
+                    </button>
+                    <button onclick="restartCurrentPart()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-3 rounded-xl shadow-sm transition text-sm flex items-center justify-center">
+                        ทำข้อสอบซ้ำอีกครั้ง
+                    </button>
+                    <button onclick="exitToDashboard()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold px-5 py-3 rounded-xl shadow-sm transition text-sm flex items-center justify-center">
+                        กลับหน้าหลัก
+                    </button>
+                </div>
+            </div>
+
+            <div id="review-details-section" class="hidden max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200/60 p-6 animate-fadeIn">
+                <h3 class="text-lg font-bold text-slate-800 mb-4 pb-2 border-b border-slate-100">บันทึกวิเคราะห์ผลสัมฤทธิ์รายข้อ (Itemized Evaluation)</h3>
+                <div class="space-y-6" id="review-list-container"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        let currentPartId = null;
+        let currentQuestionIndex = 0;
+        let partScore = 0;
+        let sessionReviewLogs = [];
+
+        // Loop to confirm integration with external database script
+        window.addEventListener('load', () => {
+            const syncInterval = setInterval(() => {
+                if (window.examDatabase && Object.keys(window.examDatabase).length > 0) {
+                    clearInterval(syncInterval);
+                    initializeDashboard();
+                    recalculateGlobalScore();
+                }
+            }, 100);
+        });
+
+        function initializeDashboard() {
+            const grid = document.getElementById("parts-grid");
+            grid.innerHTML = "";
+
+            Object.keys(window.examDatabase).forEach(key => {
+                const part = window.examDatabase[key];
+                const isDone = localStorage.getItem(`status_${key}`) === "completed";
+                const savedScore = localStorage.getItem(`score_${key}`) || 0;
+
+                const card = document.createElement("div");
+                card.className = "bg-white rounded-2xl p-6 shadow-sm hover:shadow-md border border-slate-200/60 transition flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-[11px] font-bold px-2.5 py-1 rounded-md \${isDone ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'\}">
+                                \${isDone ? '✓ สำเร็จแล้ว' : '• รอดำเนินการ'\}
+                            </span>
+                            <span class="text-xs font-bold text-slate-400\">\${part.questions.length\} Questions</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-800 mb-2">\${part.title\}</h3>
+                        <p class="text-xs text-slate-500 mb-6 leading-relaxed">\${part.description\}</p>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100 mt-auto">
+                        <span class="text-xs font-bold text-slate-500">
+                            \${isDone ? `คะแนนสูงสุด: <span class="text-blue-600">\${savedScore\}/\${part.questions.length\}</span>` : ''\}
+                        </span>
+                        <button onclick="launchExamArena('\${key\}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-sm transition">
+                            \${isDone ? 'ทดสอบซ้ำ' : 'เริ่มทำข้อสอบ'\}
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function recalculateGlobalScore() {
+            let total = 0;
+            if(!window.examDatabase) return;
+            Object.keys(window.examDatabase).forEach(key => {
+                total += parseInt(localStorage.getItem(`score_${key}`) || 0);
+            });
+            document.getElementById("global-score-tally").innerText = total;
+        }
+
+        function launchExamArena(partId) {
+            currentPartId = partId;
+            currentQuestionIndex = 0;
+            partScore = 0;
+            sessionReviewLogs = [];
+
+            document.getElementById("dashboard-view").classList.add("hidden");
+            document.getElementById("summary-view").classList.add("hidden");
+            document.getElementById("quiz-view").classList.remove("hidden");
+
+            presentQuestion();
+        }
+
+        function presentQuestion() {
+            const part = window.examDatabase[currentPartId];
+            const q = part.questions[currentQuestionIndex];
+
+            document.getElementById("explanation-panel").classList.add("hidden");
+            document.getElementById("current-score").innerText = `\${partScore\} ข้อ`;
+            
+            const progressPct = (currentQuestionIndex / part.questions.length) * 100;
+            document.getElementById("progress-bar-fill").style.width = `\${progressPct\}%`;
+            document.getElementById("progress-text").innerText = `ข้อที่ \${currentQuestionIndex + 1\}/\${part.questions.length\}`;
+            document.getElementById("question-text").innerText = q.text;
+
+            const container = document.getElementById("options-container");
+            container.innerHTML = "";
+
+            Object.keys(q.options).forEach(key => {
+                const choiceBlock = document.createElement("button");
+                choiceBlock.id = `opt-\${key\}`;
+                choiceBlock.onclick = () => evaluateChoice(key);
+                choiceBlock.className = "w-full text-left p-4 rounded-xl border border-slate-200 hover:bg-slate-50 hover:border-slate-400 transition flex items-start space-x-3 group";
+                choiceBlock.innerHTML = `
+                    <span class="flex-shrink-0 w-6 h-6 rounded-md bg-slate-100 group-hover:bg-blue-100 text-slate-600 group-hover:text-blue-700 flex items-center justify-center font-bold text-xs transition">\${key\}</span>
+                    <span class="text-slate-700 text-sm font-semibold pt-0.5">\${q.options[key]\}</span>
+                `;
+                container.appendChild(choiceBlock);
+            });
+        }
+
+        function evaluateChoice(selectedKey) {
+            const part = window.window.examDatabase[currentPartId];
+            const q = part.questions[currentQuestionIndex];
+            const blocks = document.getElementById("options-container").children;
+
+            for(let b of blocks) { b.removeAttribute("onclick"); }
+
+            const isCorrect = selectedKey === q.correct;
+            if(isCorrect) {
+                partScore++;
+                const target = document.getElementById(`opt-\${selectedKey\}`);
+                target.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/70 flex items-start space-x-3 transition";
+                target.querySelector('span').className = "flex-shrink-0 w-6 h-6 rounded-md bg-emerald-500 text-white flex items-center justify-center font-bold text-xs";
+            } else {
+                const wrongTarget = document.getElementById(`opt-\${selectedKey\}`);
+                wrongTarget.className = "w-full text-left p-4 rounded-xl border-2 border-red-500 bg-red-50/70 flex items-start space-x-3 transition";
+                wrongTarget.querySelector('span').className = "flex-shrink-0 w-6 h-6 rounded-md bg-red-500 text-white flex items-center justify-center font-bold text-xs";
+                
+                const correctTarget = document.getElementById(`opt-\${q.correct\}`);
+                correctTarget.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/70 flex items-start space-x-3 transition";
+                correctTarget.querySelector('span').className = "flex-shrink-0 w-6 h-6 rounded-md bg-emerald-500 text-white flex items-center justify-center font-bold text-xs";
+            }
+
+            sessionReviewLogs.push({
+                title: q.text,
+                choices: q.options,
+                userAnswer: selectedKey,
+                systemAnswer: q.correct,
+                status: isCorrect,
+                rationale: q.context
+            });
+
+            document.getElementById("clinical-context").innerText = q.context;
+            const breakdownBox = document.getElementById("choice-breakdowns");
+            breakdownBox.innerHTML = "";
+
+            Object.keys(q.explanations).forEach(key => {
+                const node = document.createElement("div");
+                node.className = `p-3 rounded-xl text-xs leading-relaxed mb-1.5 border \text-left \${key === q.correct ? 'bg-emerald-50 border-emerald-200 text-emerald-900 font-medium' : 'bg-white border-slate-200 text-slate-600'\}`;
+                node.innerHTML = `<strong>ช้อยส์ \${key\}:</strong> \${q.explanations[key]\}`;
+                breakdownBox.appendChild(node);
+            });
+
+            document.getElementById("explanation-panel").classList.remove("hidden");
+            document.getElementById("current-score").innerText = `\${partScore\} ข้อ`;
+        }
+
+        function nextQuestion() {
+            const part = window.examDatabase[currentPartId];
+            currentQuestionIndex++;
+
+            if(currentQuestionIndex < part.questions.length) {
+                presentQuestion();
+            } else {
+                compileEvaluationMetrics();
+            }
+        }
+
+        function compileEvaluationMetrics() {
+            const part = window.examDatabase[currentPartId];
+            localStorage.setItem(`status_${currentPartId}`, "completed");
+            localStorage.setItem(`score_${currentPartId}`, partScore);
+
+            document.getElementById("quiz-view").classList.add("hidden");
+            document.getElementById("summary-view").classList.remove("hidden");
+            document.getElementById("review-details-section").classList.add("hidden");
+
+            document.getElementById("summary-score").innerText = partScore;
+            document.getElementById("summary-total").innerText = part.questions.length;
+
+            const metric = (partScore / part.questions.length) * 100;
+            const badge = document.getElementById("summary-grade");
+            const icon = document.getElementById("summary-icon-box");
+
+            if(metric >= 85) {
+                badge.innerText = " ยอดเยี่ยม (Excellent)"; badge.className = "text-lg font-bold mt-2 text-emerald-600";
+                icon.className = "inline-flex p-4 rounded-full bg-emerald-50 text-emerald-600 mb-4";
+            } else if (metric >= 70) {
+                badge.innerText = "ดีมาก (Good)"; badge.className = "text-lg font-bold mt-2 text-blue-600";
+                icon.className = "inline-flex p-4 rounded-full bg-blue-50 text-blue-600 mb-4";
+            } else if (metric >= 50) {
+                badge.innerText = "ผ่านเกณฑ์พอใช้ (Pass)"; badge.className = "text-lg font-bold mt-2 text-amber-600";
+                icon.className = "inline-flex p-4 rounded-full bg-amber-50 text-amber-600 mb-4";
+            } else {
+                badge.innerText = "ต้องทบทวนเพิ่มเติม (Needs Review)"; badge.className = "text-lg font-bold mt-2 text-red-600";
+                icon.className = "inline-flex p-4 rounded-full bg-red-50 text-red-600 mb-4";
+            }
+
+            buildHistoricalReviewAccordion();
+            recalculateGlobalScore();
+        }
+
+        function toggleReviewDetails() {
+            const container = document.getElementById("review-details-section");
+            container.classList.toggle("hidden");
+            if(!container.classList.contains("hidden")) {
+                container.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function buildHistoricalReviewAccordion() {
+            const logBox = document.getElementById("review-list-container");
+            logBox.innerHTML = "";
+
+            sessionReviewLogs.forEach((item, index) => {
+                const node = document.createElement("div");
+                node.className = "border border-slate-200 rounded-xl p-4 bg-slate-50/40 text-left";
+                
+                let rawChoices = "";
+                Object.keys(item.choices).forEach(k => {
+                    let styleRules = "border-slate-100 bg-white text-slate-700";
+                    if(k === item.systemAnswer) styleRules = "border-emerald-300 bg-emerald-50 text-emerald-900 font-bold";
+                    if(k === item.userAnswer && !item.status) styleRules = "border-red-300 bg-red-50 text-red-900";
+
+                    rawChoices += `
+                        <div class="text-xs p-2.5 rounded-lg border \${styleRules\} mb-1 flex justify-between items-center">
+                            <span><strong>\${k\}:</strong> \${item.choices[k]\}</span>
+                            \${k === item.systemAnswer ? '<span class="text-[10px] bg-emerald-500 text-white font-bold px-1.5 py-0.5 rounded">เฉลย</span>' : ''\}
+                            \${k === item.userAnswer && !item.status ? '<span class="text-[10px] bg-red-500 text-white font-bold px-1.5 py-0.5 rounded">คุณตอบ</span>' : ''\}
+                        </div>
+                    `;
+                });
+
+                node.innerHTML = `
+                    <div class="flex items-start space-x-2 mb-3">
+                        <span class="flex-shrink-0 text-[10px] font-bold px-2 py-0.5 rounded \${item.status ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'\}">
+                            ข้อที่ \${index + 1\} • \${item.status ? 'ถูก' : 'ผิด'\}
+                        </span>
+                        <h4 class="text-xs font-bold text-slate-800 leading-relaxed">\${item.title\}</h4>
+                    </div>
+                    <div class="space-y-1 mb-2">\${rawChoices\}</div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200/80 text-xs text-slate-600 font-medium">
+                        <span class="font-bold text-indigo-700 block mb-1">กลไกคลินิก:</span> \${item.rationale\}
+                    </div>
+                `;
+                logBox.appendChild(node);
+            });
+        }
+
+        function exitToDashboard() {
+            document.getElementById("quiz-view").classList.add("hidden");
+            document.getElementById("summary-view").classList.add("hidden");
+            document.getElementById("dashboard-view").classList.remove("hidden");
+            initializeDashboard();
+        }
+
+        function restartCurrentPart() {
+            launchExamArena(currentPartId);
+        }
+    </script>
+
+    <script src="questions.js"></script>
+</body>
+</html>
